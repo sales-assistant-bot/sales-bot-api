@@ -37,7 +37,7 @@ module.exports = function DecodeBotAPI(knex){
             knex('sales')
             .select('*')
             .innerJoin("customers", "sales.customer_id", '=', 'customers.id')
-            .where('customers.id', customerId)
+            .where('customers.id','=', customerId)
          )
       },
       //list of cost/expensees instance for given customer
@@ -271,6 +271,33 @@ module.exports = function DecodeBotAPI(knex){
                WHERE YEAR(sales.createdAt) = "${year}"
                AND MONTH(sales.createdAt) = "${month}"))*100, 2)
                AS GPM_m${month}_y${year}`))
+      },
+      createCustomer: function(info){
+         return (
+            knex('customers').insert({id: null, name: info.name})
+            .then(function(customerInfo){
+               return knex('customers').select(`id`, 'name').where('id',"=", [customerInfo.insertId])
+            })
+            .then(customerReturn=> customerReturn[0])
+            )
+      },
+      createSale: function(info){
+         return (
+            knex('sales').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
+            .then(function(saleInfo){
+               return knex('sales').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", [saleInfo.insertId])
+            })
+            .then(customerReturn=> customerReturn[0])
+         )
+      },
+      createCost: function(info){
+         return (
+            knex('costs').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
+            .then(function(costInfo){
+               return knex('costs').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", [costInfo.insertId])
+            })
+            .then(customerReturn=> customerReturn[0])
+         )
       }
    }
 }
