@@ -25,6 +25,11 @@ module.exports = function DecodeBotAPI(knex){
             knex('customers').select("*")
          )
       },
+      customerInfoByName: function(companyName){
+         return(
+            knex('customers').select('id').where("customers.name", '=', companyName)   
+         )
+      },
       // Total number of sales
       numberOfSales: function(){
          return (

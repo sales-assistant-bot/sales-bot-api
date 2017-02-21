@@ -87,12 +87,23 @@ app.get('/costs', function(request, response){
 })
 
 //Put more queries attached to the customers
-app.get('/customers', function(request, response){
-    decodeBotAPI
-    .allCustomerInfo()
-    .then(data=>{
-        response.json(data);
-    })
+app.get('/company', function(request, response){
+    if(!_.isEmpty(request.query)){
+        if(request.query.name){
+            decodeBotAPI
+            .customerInfoByName(request.query.name)
+            .then(data=>{
+                response.json(data);
+            })
+        }
+    }
+    else{
+        decodeBotAPI
+        .allCustomerInfo()
+        .then(data=>{
+            response.json(data);
+        })
+    }
 })
 
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
@@ -102,10 +113,8 @@ app.get('/customers', function(request, response){
 app.post("/customers", function(request, response){
     decodeBotAPI
     .createCustomer({name: "best company"})
-    .then(function(newUser){
-        //Should I be using render or send? 
-        // since I am not using pug, what should be done
-        response.send('', {name: newUser})
+    .then(newUser=>{
+        response.json(newUser);
     })
 })
 
@@ -116,10 +125,8 @@ app.post("/sales", function(request, response){
                 customer_id: 2,
                 amount: 250
     })
-    .then(function(newSale){
-        //Should I be using render or send? 
-        // since I am not using pug, what should be done
-        response.send('', {name: newSale})
+    .then(newSale=>{
+        response.json(newSale);
     })
 })
 
@@ -130,10 +137,8 @@ app.post("/costs", function(request, response){
                     customer_id: 2,
                     amount: 120
     })
-    .then(function(newCost){
-        //Should I be using render or send? 
-        // since I am not using pug, what should be done
-        response.send('', {name: newCost})
+    .then(newCost=>{
+        response.json(newCost);
     })
 })
 
