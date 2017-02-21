@@ -278,31 +278,26 @@ module.exports = function DecodeBotAPI(knex){
                AS GPM_m${month}_y${year}`))
       },
       createCustomer: function(info){
-         return (
-            knex('customers').insert({id: null, name: info.name})
+         return (knex('customers').insert({name: info.name})
             .then(function(customerInfo){
-               return knex('customers').select(`id`, 'name').where('id',"=", [customerInfo.insertId])
+               return knex('customers').select(`id`, 'name').where('id',"=", customerInfo[0])
             })
             .then(customerReturn=> customerReturn[0])
-            )
+         )
       },
       createSale: function(info){
-         return (
-            knex('sales').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
+         return knex('sales').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
             .then(function(saleInfo){
-               return knex('sales').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", [saleInfo.insertId])
+               return knex('sales').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", saleInfo[0])
             })
             .then(customerReturn=> customerReturn[0])
-         )
       },
       createCost: function(info){
-         return (
-            knex('costs').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
+         return knex('costs').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
             .then(function(costInfo){
-               return knex('costs').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", [costInfo.insertId])
+               return knex('costs').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", costInfo[0])
             })
             .then(customerReturn=> customerReturn[0])
-         )
       }
    }
 }

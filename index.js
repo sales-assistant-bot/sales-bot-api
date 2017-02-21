@@ -16,9 +16,10 @@ var decodeBotAPI = require("./backend")(knex)
 
 app.use(body_parser.json());
     /* Is this below needed?*/
-// app.use(body_parser.urlencoded({
-//     extended: true
-// }));
+app.use(body_parser.urlencoded({
+    extended: true
+}));
+
 
 
 
@@ -110,21 +111,25 @@ app.get('/company', function(request, response){
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 
 
-app.post("/customers", function(request, response){
+app.post("/company", function(request, response){
+    if(!request.body.name){
+        response.json({error: 'no name query string provided, please use ?name=NAME'});
+    }
     decodeBotAPI
-    .createCustomer({name: "best company"})
+    .createCustomer(request.body)
     .then(newUser=>{
         response.json(newUser);
     })
+    .catch(console.log)
 })
 
 
 app.post("/sales", function(request, response){
+    if(!request.body.customer_id){
+        response.json({error: "must connect sale to specific customer. Please add the customer_id"})
+    }
     decodeBotAPI
-    .createSale({
-                customer_id: 2,
-                amount: 250
-    })
+    .createSale(request.body)
     .then(newSale=>{
         response.json(newSale);
     })
@@ -132,11 +137,11 @@ app.post("/sales", function(request, response){
 
 
 app.post("/costs", function(request, response){
+    if(!request.body.customer_id){
+        response.json({error: "Must connect expense to specific customer. Please add the customer_id"})
+    }
     decodeBotAPI
-    .createCustomer({
-                    customer_id: 2,
-                    amount: 120
-    })
+    .createCost(request.body)
     .then(newCost=>{
         response.json(newCost);
     })
