@@ -7,10 +7,60 @@
 
 module.exports = function DecodeBotAPI(knex){
    return{
+      //get all sale info
+      allSaleInfo: function(){
+         return(
+            knex('sales').select('*')
+         )
+      },
+      //All cost instances for user
+      allCostInfo: function(){
+         return(
+            knex('costs').select("*")
+         )
+      },
+      //all customer info for user
+      allCustomerInfo: function(){
+         return(
+            knex('customers').select("*")
+         )
+      },
       // Total number of sales
       numberOfSales: function(){
          return (
             knex("sales").count("sales.id as Amount_Of_Sales")
+         )
+      },
+      //list of sales instances for given customer
+      customerSales: function(customerId){
+         return(
+            knex('sales')
+            .select('*')
+            .innerJoin("customers", "sales.customer_id", '=', 'customers.id')
+            .where('customers.id', customerId)
+         )
+      },
+      //list of cost/expensees instance for given customer
+      customerCost: function(customerId){
+         return (
+            knex('costs')
+            .select('*')
+            .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
+            .where('customers.id', customerId)
+         )
+      },
+      salesForGivenYear:function(year){
+         return(
+            knex('sales')
+            .select("*")
+            .whereRaw(`YEAR(sales.createdAt) = ${year}`)
+         )
+      },
+      costForGivenYear: function(year){
+         return(
+            knex('costs')
+            .select('*')
+            .whereRaw(`YEAR(costs.createdAt) = ${year}`)
          )
       },
       /* Per Year */
