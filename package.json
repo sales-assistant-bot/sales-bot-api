@@ -1,0 +1,29 @@
+{
+  "name": "decode_bot",
+  "version": "1.0.0",
+  "description": ",-----.,--.                  ,--. ,---.   ,--.,------.  ,------.     '  .--./|  | ,---. ,--.,--. ,-|  || o   \\  |  ||  .-.  \\ |  .---'     |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \\  :|  `--,      '  '--'\\|  |' '-' ''  ''  '\\ `-' | .'  /   |  ||  '--'  /|  `---.      `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'     -----------------------------------------------------------------",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "knex": "^0.12.7",
+    "lodash": "^4.17.4",
+    "mysql": "^2.13.0",
+    "nodemon": "^1.11.0",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajdez/decodemtl_bot_Project.git"
+  },
+  "author": "Anthony Hopkins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajdez/decodemtl_bot_Project/issues"
+  },
+  "homepage": "https://github.com/ajdez/decodemtl_bot_Project#readme"
+}

@@ -1,3 +1,4 @@
+var _ = require('lodash')
 var express = require('express');
 var app = express();
 var body_parser = require("body-parser");
@@ -18,7 +19,7 @@ app.get("/", function(request,response){
 })
 
 app.get('/sales', function(request, response){
-    if(request.query){
+    if(!_.isEmpty(request.query)){
         if(request.query.companyId){
             decodeBotAPI
             .customerSales(request.query.companyId)
@@ -44,7 +45,7 @@ app.get('/sales', function(request, response){
 })
 
 app.get('/costs', function(request, response){
-    if(request.query){
+    if(!_.isEmpty(request.query)){
         if(request.query.companyId){
             decodeBotAPI
             .customerCost(request.query.companyId)
@@ -73,10 +74,8 @@ app.get('/costs', function(request, response){
         .then(data=>{
             response.json(data);
             //same as writing  "response.send(JSON.stringify(data))"
-    })
-}
-    
-    
+        })
+    }
 })
 
 //Put more queries attached to the customers
@@ -91,29 +90,29 @@ app.get('/customers', function(request, response){
 
 
 app.get('/reports', function(request, response){
-    if(request.query){
-        if(request.query.numberOfSales){
+    if(!_.isEmpty(request.query)){
+        if(request.query.numberOfSales === ''){
             decodeBotAPI
             .numberOfSales()
             .then(data=>{
                 response.json(data);
             })
         }
-        else if(request.query.numberOfSalesYear){
+        else if(request.query.numberOfSalesYear  === ''){
             decodeBotAPI
             .numberOfSalesYear()
             .then(data=>{
                 response.json(data);
             })
         }
-        else if (request.query.numberOfSalesMonth){
+        else if (request.query.numberOfSalesMonth  === ''){
             decodeBotAPI
             .numberOfSalesMonth()
             .then(data=>{
                 response.json(data);
             })
         }
-        else if (request.query.totalNumberCost){
+        else if (request.query.totalNumberCost  === ''){
             //total instances of cost
             decodeBotAPI
             .totalNumberCost()
@@ -121,7 +120,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.totalNumberCostYear){
+        else if (request.query.totalNumberCostYear  === ''){
             //total instances of cost by year
             decodeBotAPI
             .totalNumberCostYear()
@@ -129,7 +128,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.totalNumberCostMonth){
+        else if (request.query.totalNumberCostMonth  === ''){
             //total instances of cost by month
             decodeBotAPI
             .totalNumberCostMonth()
@@ -137,7 +136,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.totalRev){
+        else if (request.query.totalRev  === ''){
             //total revenue (from all years)
             decodeBotAPI
             .totalRev()
@@ -145,7 +144,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.totalRevYear){
+        else if (request.query.totalRevYear === ''){
             //total revenue by year
             decodeBotAPI
             .totalRevYear()
@@ -153,7 +152,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.totalRevMonth){
+        else if (request.query.totalRevMonth === ''){
             //total revenue (from all years)
             decodeBotAPI
             .totalRevMonth()
@@ -161,7 +160,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.avgDealSize){
+        else if (request.query.avgDealSize === ''){
             //average deal size
             decodeBotAPI
             .avgDealSize()
@@ -169,7 +168,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.avgDealSizeYear){
+        else if (request.query.avgDealSizeYear === ''){
             //average deal size by year
             decodeBotAPI
             .avgDealSizeYear()
@@ -177,7 +176,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.avgDealSizeMonth){
+        else if (request.query.avgDealSizeMonth === ''){
             //average deal size by month, year
             decodeBotAPI
             .avgDealSizeMonth()
@@ -185,7 +184,7 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.salesVsCost){
+        else if (request.query.salesVsCost === ''){
             //This query will be useful for graphs
             decodeBotAPI
             .salesVsCost()
@@ -207,13 +206,13 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        // else if (request.query.customerCostYear){
-        //     decodeBotAPI
-        //     .customerCostYear(request.query.customerCostYear)//NEEDS customer.id AS INPUT
-        //     .then(data=>{
-        //         response.json(data);
-        //     })
-        // }
+        else if (request.query.customerCostYear){
+            decodeBotAPI
+            .customerCostYear(request.query.customerCostYear) //NEEDS customer.id AS INPUT
+            .then(data=>{
+                response.json(data);
+            })
+        }
         else if (request.query.customerCostMonth){
             decodeBotAPI
             .customerCostMonth(request.query.customerCostMonth)//NEEDS customer.id AS INPUT
@@ -221,14 +220,14 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.costPerSale){
+        else if (request.query.costPerSale === ''){
             decodeBotAPI
             .costPerSale()
             .then(data=>{
                 response.json(data);
             })
         }
-        else if (request.query.grossProfitMargin){
+        else if (request.query.grossProfitMargin === ''){
             //gross profit margin since beg of time
             decodeBotAPI
             .grossProfitMargin()
@@ -255,10 +254,15 @@ app.get('/reports', function(request, response){
         // }
     }
     else{
-        decodeBotAPI
-        .totalRev()
-        .then(data=>{
-            response.json(data);
-        })
+        response.send(`<h1>Pick a type of report to generate</h1>`)
     }
 })
+
+
+// Boilerplate code to start up the web server
+var server = app.listen(process.env.PORT, process.env.IP, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('Example app listening at http://%s:%s', host, port);
+});
