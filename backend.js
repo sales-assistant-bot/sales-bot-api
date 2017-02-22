@@ -283,6 +283,9 @@ module.exports = function DecodeBotAPI(knex){
                return knex('customers').select(`id`, 'name').where('id',"=", customerInfo[0])
             })
             .then(customerReturn=> customerReturn[0])
+            .catch(function(err){
+               console.log(err, "   Alread existing in database");
+            })
          )
       },
       createSale: function(info){
