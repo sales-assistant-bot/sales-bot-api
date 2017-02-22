@@ -29,9 +29,9 @@ app.get("/", function(request,response){
 
 app.get('/sales', function(request, response){
     if(!_.isEmpty(request.query)){
-        if(request.query.companyId){
+        if(request.query.name){
             decodeBotAPI
-            .customerSales(request.query.companyId)
+            .customerSales(request.query.name)
             .then(data=>{
                 response.json(data);
             })
@@ -53,7 +53,7 @@ app.get('/sales', function(request, response){
     }
 })
 
-app.get('/costs', function(request, response){
+app.get('/expenses', function(request, response){
     if(!_.isEmpty(request.query)){
         if(request.query.companyId){
             decodeBotAPI
@@ -136,7 +136,7 @@ app.post("/sales", function(request, response){
 })
 
 
-app.post("/costs", function(request, response){
+app.post("/expenses", function(request, response){
     if(!request.body.customer_id){
         response.json({error: "Must connect expense to specific customer. Please add the customer_id"})
     }

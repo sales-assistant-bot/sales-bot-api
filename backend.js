@@ -37,12 +37,12 @@ module.exports = function DecodeBotAPI(knex){
          )
       },
       //list of sales instances for given customer
-      customerSales: function(customerId){
+      customerSales: function(customerName){
          return(
             knex('sales')
-            .select('*')
+            .select(`id`, `name`)
             .innerJoin("customers", "sales.customer_id", '=', 'customers.id')
-            .where('customers.id','=', customerId)
+            .where('name','=', customerName)
          )
       },
       //list of cost/expensees instance for given customer
