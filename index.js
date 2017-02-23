@@ -175,6 +175,13 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
+        else if (request.query.costPerCustomer !== undefined){
+            decodeBotAPI
+            .costPerCustomer()
+            .then(data=>{
+                response.json(data);
+            })
+        }
         else if (request.query.totalNumberCost  !== undefined){
             //total instances of cost
             decodeBotAPI
@@ -219,6 +226,14 @@ app.get('/reports', function(request, response){
             //total revenue (from all years)
             decodeBotAPI
             .totalRevMonth()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.totalExpenses !== undefined){
+            //total expenses
+            decodeBotAPI
+            .totalExpenses()
             .then(data=>{
                 response.json(data);
             })
@@ -290,6 +305,20 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
+        else if (request.query.topClients !== undefined){
+            decodeBotAPI
+            .topClients()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.profits !== undefined){
+            decodeBotAPI
+            .profits()
+            .then(data=>{
+                response.json(data);
+            })
+        }
         else if (request.query.grossProfitMargin !== undefined){
             //gross profit margin since beg of time
             decodeBotAPI
@@ -302,6 +331,13 @@ app.get('/reports', function(request, response){
             //gross profit margin since beg of time
             decodeBotAPI
             .grossProfitMarginYear(request.query.grossProfitMarginYear)
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.barChartQuery){
+            decodeBotAPI
+            .barChartQuery()
             .then(data=>{
                 response.json(data);
             })

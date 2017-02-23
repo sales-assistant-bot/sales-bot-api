@@ -112,6 +112,9 @@ module.exports = function DecodeBotAPI(knex){
       totalRev: function(){
          return(
             knex("sales").sum('sales.amount as Total_Sales')
+            .then(function(data){
+               return data[0];
+            })
          )
       },
       // Total Revenue by YEAR(total dollar worth of sales)
@@ -132,6 +135,15 @@ module.exports = function DecodeBotAPI(knex){
                .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
          )
       },
+      totalExpenses: function(){
+         return(
+            knex('costs')
+               .sum('costs.amount as Total_Expenses')
+               .then(function(data){
+                  return data[0];
+               })
+         )
+      },
       //Average Deal Size (total sales amount / total sales)
       avgDealSize: function(){
          return(
@@ -140,6 +152,7 @@ module.exports = function DecodeBotAPI(knex){
                .sum('sales.amount as Total_Sales')
                .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount"))
          )
+         .then(data=>data[0])
       },
       //Average Deal Size per YEAR(total sales amount / total sales)
       avgDealSizeYear: function(){
@@ -234,6 +247,20 @@ module.exports = function DecodeBotAPI(knex){
             knex.select(knex.raw('ROUND((SELECT SUM(costs.amount) FROM costs) / (SELECT COUNT(sales.id) FROM sales),2) as Cost_Per_Sale'))
          )
       },
+      profits: function(){
+         return(
+            knex.select(knex.raw(`((select SUM(sales.amount) from sales) - (select SUM(costs.amount) from costs)) as Profit`))
+         )
+         .then(data => data[0])
+      },
+      barChartQuery: function(){
+        return(
+          knex
+          .select(knex.raw(`select SUM(sales.amount) AS Sales from sales group by MONTH(sales.createdAt)`))
+          .select(knex.raw(`select SUM(costs.amount) AS Expenses from costs group by MONTH(costs.createdAt)`))
+          .select(knex.raw(`((select SUM(sales.amount) from sales) - (select SUM(costs.amount) from costs)) as Profit`))
+        )
+      },
       //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)    %%%%%%
       /*For ALL DATA */
       grossProfitMargin: function(){
@@ -245,6 +272,9 @@ module.exports = function DecodeBotAPI(knex){
                                                 SELECT SUM(sales.amount)
                                                 FROM sales))*100, 2) AS Gross_Profit_Margin_Percent`))
          )
+         .then(function(data){
+            return data[0];
+         })
       },
       /* /////////////////////////////USING Year ///////////////////////////////////////////// */
       grossProfitMarginYear: function(year){
@@ -262,7 +292,7 @@ module.exports = function DecodeBotAPI(knex){
       },
       /* ///////////////////////////////USING MONTH + Year ////////////////////////////////////////// */
       grossProfitMarginMonth: function(month, year){
-         knex.select(knex.raw(`ROUND((((
+         return(knex.select(knex.raw(`ROUND((((
            SELECT SUM(sales.amount)
            FROM sales
            WHERE YEAR(sales.createdAt) = "${year}"
@@ -275,8 +305,23 @@ module.exports = function DecodeBotAPI(knex){
                FROM sales
                WHERE YEAR(sales.createdAt) = "${year}"
                AND MONTH(sales.createdAt) = "${month}"))*100, 2)
-               AS GPM_m${month}_y${year}`))
+               AS GPM_m${month}_y${year}`)))
       },
+      topClients: function(){
+         return(
+            knex('customers')
+         .select(`customers.name as CompanyName`)
+         .sum('sales.amount as TotalSales')
+         .innerJoin('sales', 'sales.customer_id', '=', 'customers.id')
+         .groupBy('customers.id')
+         )
+      },
+      
+      
+      
+      
+      
+      
       createCustomer: function(info){
          return (knex('customers').insert({name: info.name})
             .then(function(customerInfo){
