@@ -154,54 +154,9 @@ app.post("/expenses", function(request, response){
 
 app.get('/reports', function(request, response){
     if(!_.isEmpty(request.query)){
-        if(request.query.numberOfSales !== undefined){
-            decodeBotAPI
-            .numberOfSales()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if(request.query.numberOfSalesYear  !== undefined){
-            decodeBotAPI
-            .numberOfSalesYear()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.numberOfSalesMonth  !== undefined){
-            decodeBotAPI
-            .numberOfSalesMonth()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.costPerCustomer !== undefined){
+        if (request.query.costPerCustomer !== undefined){
             decodeBotAPI
             .costPerCustomer()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.totalNumberCost  !== undefined){
-            //total instances of cost
-            decodeBotAPI
-            .totalNumberCost()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.totalNumberCostYear  !== undefined){
-            //total instances of cost by year
-            decodeBotAPI
-            .totalNumberCostYear()
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.totalNumberCostMonth  !== undefined){
-            //total instances of cost by month
-            decodeBotAPI
-            .totalNumberCostMonth()
             .then(data=>{
                 response.json(data);
             })
@@ -284,20 +239,6 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.customerCostYear){
-            decodeBotAPI
-            .customerCostYear(request.query.customerCostYear) //NEEDS customer.id AS INPUT
-            .then(data=>{
-                response.json(data);
-            })
-        }
-        else if (request.query.customerCostMonth){
-            decodeBotAPI
-            .customerCostMonth(request.query.customerCostMonth)//NEEDS customer.id AS INPUT
-            .then(data=>{
-                response.json(data);
-            })
-        }
         else if (request.query.costPerSale !== undefined){
             decodeBotAPI
             .costPerSale()
@@ -349,15 +290,6 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        /* How do I get access to both month and year in query string */
-        // else if (request.query.grossProfitMarginMonth){
-        //     //gross profit margin since beg of time
-        //     decodeBotAPI
-        //     .grossProfitMarginMonth(request.query.grossProfitMarginMonth)
-        //     .then(data=>{
-        //         response.json(data);
-        //     })
-        // }
     }
     else{
         response.send(`<h1>Pick a type of report to generate</h1>`)
@@ -372,3 +304,67 @@ var server = app.listen(process.env.PORT, process.env.IP, function() {
 
     console.log('Example app listening at http://%s:%s', host, port);
 });
+
+
+//Get request that are not being used at the moment
+/*
+        else if(request.query.numberOfSalesYear  !== undefined){
+            decodeBotAPI
+            .numberOfSalesYear()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.numberOfSalesMonth  !== undefined){
+            decodeBotAPI
+            .numberOfSalesMonth()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.totalNumberCost  !== undefined){
+            //total instances of cost
+            decodeBotAPI
+            .totalNumberCost()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.totalNumberCostYear  !== undefined){
+            //total instances of cost by year
+            decodeBotAPI
+            .totalNumberCostYear()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.totalNumberCostMonth  !== undefined){
+            //total instances of cost by month
+            decodeBotAPI
+            .totalNumberCostMonth()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.customerCostYear){
+            decodeBotAPI
+            .customerCostYear(request.query.customerCostYear) //NEEDS customer.id AS INPUT
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.customerCostMonth){
+            decodeBotAPI
+            .customerCostMonth(request.query.customerCostMonth)//NEEDS customer.id AS INPUT
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if(request.query.numberOfSales !== undefined){
+            decodeBotAPI
+            .numberOfSales()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+*/
