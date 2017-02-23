@@ -335,9 +335,16 @@ app.get('/reports', function(request, response){
                 response.json(data);
             })
         }
-        else if (request.query.barChartQuery){
+        else if (request.query.barChartQuery !== undefined){
             decodeBotAPI
             .barChartQuery()
+            .then(data=>{
+                response.json(data);
+            })
+        }
+        else if (request.query.tableChart !== undefined){
+            decodeBotAPI
+            .tableChart()
             .then(data=>{
                 response.json(data);
             })
