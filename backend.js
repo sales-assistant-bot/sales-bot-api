@@ -182,26 +182,43 @@ module.exports = function DecodeBotAPI(knex){
          )
          .then(data => data[0])
       },
+      // barChartQuery: function(){
+      //    var baseQuery = (
+      //       knex
+      //       .select('all_months.name as Month')
+      //       .select(knex.raw('COALESCE(SUM(sales.amount), 0) as Sales'))
+      //       .select(knex.raw('COALESCE(SUM(costs.amount), 0) as Costs'))
+      //       .from('all_months')
+      //       .leftJoin(`sales`,'all_months.id', knex.raw('MONTH(sales.createdAt)'))
+      //       .leftJoin('costs', 'all_months.id', knex.raw('MONTH(costs.createdAt)'))
+      //       .groupByRaw('all_months.id')
+      //       .orderBy('all_months.id')
+      //    ).as('baseQuery');
+         
+      //    return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
+      // },
       barChartQuery: function(){
          var baseQuery = (
             knex
             .select('all_months.name as Month')
-            .select(knex.raw('COALESCE(SUM(sales.amount), 0) as Sales'))
-            .select(knex.raw('COALESCE(SUM(costs.amount), 0) as Costs'))
+            .select(knex.raw('COALESCE(SUM(distinct sales.amount), 0) as Sales'))
+            .select(knex.raw('COALESCE(SUM(distinct costs.amount), 0) as Costs'))
             .from('all_months')
-            .leftJoin(`sales`,'all_months.id', knex.raw('MONTH(sales.createdAt)'))
-            .leftJoin('costs', 'all_months.id', knex.raw('MONTH(costs.createdAt)'))
-            .groupByRaw('all_months.id')
+            .leftJoin(knex.raw(`sales on all_months.id = MONTH(sales.createdAt)`))
+            .leftJoin(knex.raw(`costs on all_months.id = MONTH(costs.createdAt)`))
+            .groupByRaw('Month')
             .orderBy('all_months.id')
-         ).as('baseQuery');
+         ).as('baseQuery')
          
-         return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
+        return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
       },
       tableChart: function(){
         return(
             knex('sales')
             .select('customers.name as Customers', 'sales.amount as Sales', 'sales.createdAt as Dates')
             .innerJoin('customers', 'customers.id', '=', 'sales.customer_id')
+            .orderByRaw('Dates DESC')
+            .limit(10)
           ) 
       },
       //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)    %%%%%%
@@ -260,9 +277,9 @@ module.exports = function DecodeBotAPI(knex){
          )
       },
       createCustomer: function(info){
-         return (knex('customers').insert({name: info.name})
+         return (knex('customers').insert({name: info.name, createdAt: new Date()})
             .then(function(customerInfo){
-               return knex('customers').select(`id`, 'name').where('id',"=", customerInfo[0])
+               return knex('customers').select(`id`, 'name', 'createdAt').where('id',"=", customerInfo[0])
             })
             .then(customerReturn=> customerReturn[0])
             .catch(function(err){
