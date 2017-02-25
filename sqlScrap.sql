@@ -40,3 +40,18 @@ CREATE TABLE goals (
 --  convertedAt    DATETIME,
 --  customer_id    INT(11)         REFERENCES customers(id)
 -- );
+
+
+
+
+
+ 
+select goals.id, goals.amount as GoalAmount, 
+       sum(sales.amount) as CurrentAmount, 
+       (goals.amount - sum(sales.amount)) as AmountMissing, 
+        goals.startDate as StartDate,
+        goals.endDate as EndDate
+from sales
+join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)
+group by goals.id;
+

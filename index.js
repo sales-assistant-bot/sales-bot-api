@@ -136,6 +136,9 @@ app.post("/sales", function(request, response){
     if(!request.body.customer_id){
         response.json({error: "must connect sale to specific customer. Please add the customer_id"})
     }
+    else if (!request.body.amount){
+        response.json({error: "Please enter a Sale Amount"})
+    }
     decodeBotAPI
     .createSale(request.body)
     .then(newSale=>{
@@ -148,6 +151,9 @@ app.post("/expenses", function(request, response){
     if(!request.body.customer_id){
         response.json({error: "Must connect expense to specific customer. Please add the customer_id"})
     }
+    else if(!request.body.amount){
+        response.json({error: "Please enter a Cost Amount"})
+    }
     decodeBotAPI
     .createCost(request.body)
     .then(newCost=>{
@@ -155,7 +161,19 @@ app.post("/expenses", function(request, response){
     })
 })
 
-
+app.post("/goals", function(request, response){
+    if(!request.body.amount){
+        response.json({error: "Please enter a Goal"})
+    }
+    else if(!request.body.endDate){
+        response.json({error: "please enter a date in which the goal ends"})
+    }
+    decodeBotAPI
+    .createGoal(request.body)
+    .then(newGoal=>{
+        response.json(newGoal);
+    })
+})
 
 /* IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 /* IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII */
@@ -298,6 +316,13 @@ app.get('/reports', function(request, response){
             .tableChart()
             .then(data=>{
                 response.json(data);
+            })
+        }
+        else if (request.query.goalGauge !== undefined){
+            decodeBotAPI
+            .goalGauge()
+            .then(data=>{
+                response.json(data)
             })
         }
     }

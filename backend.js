@@ -25,10 +25,10 @@ module.exports = function DecodeBotAPI(knex) {
             knex('customers').select("*")
          )
       },
-      allGoalInfo: function(){
-        return(
+      allGoalInfo: function() {
+         return (
             knex('goals').select("*")
-         ) 
+         )
       },
       customerInfoByName: function(companyName) {
          return (
@@ -281,6 +281,18 @@ module.exports = function DecodeBotAPI(knex) {
             .groupBy('customers.id')
          )
       },
+      goalGauge: function() {
+         return(
+            knex
+            .select('goals.id', 'goals.amount as GoalAmount')
+            .sum('sales.amount as CurrentAmount')
+            .select(knex.raw('(goals.amount - sum(sales.amount)) as AmountMissing'))
+            .select('goals.startDate as StartDate', 'goals.endDate as EndDate')
+            .from('sales')
+            .innerJoin(knex.raw(`goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)`))
+            .groupBy('goals.id')
+         )
+      },
       createCustomer: function(info) {
          return (knex('customers').insert({
                name: info.name,
@@ -295,7 +307,7 @@ module.exports = function DecodeBotAPI(knex) {
             })
          )
       },
-      createSale: function(info) {  
+      createSale: function(info) {
          return knex('sales').insert({
                id: null,
                customer_id: info.customer_id,
@@ -328,7 +340,7 @@ module.exports = function DecodeBotAPI(knex) {
                endDate: info.endDate,
                createdAt: new Date()
             })
-            .then(function(goalInfo){
+            .then(function(goalInfo) {
                return knex('goals').select('id', 'amount', 'startDate', 'endDate', 'createdAt', 'updatedAt').where('id', '=', goalInfo[0])
             })
             .then(goalReturn => goalReturn[0])
