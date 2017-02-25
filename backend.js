@@ -5,42 +5,47 @@
 //    }
 // });
 
-module.exports = function DecodeBotAPI(knex){
-   return{
+module.exports = function DecodeBotAPI(knex) {
+   return {
       //get all sale info
-      allSaleInfo: function(){
-         return(
+      allSaleInfo: function() {
+         return (
             knex('sales').select('*')
          )
       },
       //All cost instances for user
-      allCostInfo: function(){
-         return(
+      allCostInfo: function() {
+         return (
             knex('costs').select("*")
          )
       },
       //all customer info for user
-      allCustomerInfo: function(){
-         return(
+      allCustomerInfo: function() {
+         return (
             knex('customers').select("*")
          )
       },
-      customerInfoByName: function(companyName){
-         return(
-            knex('customers').select('id').where("customers.name", '=', companyName)   
+      allGoalInfo: function(){
+        return(
+            knex('goals').select("*")
+         ) 
+      },
+      customerInfoByName: function(companyName) {
+         return (
+            knex('customers').select('id').where("customers.name", '=', companyName)
          )
       },
       //list of sales instances for given customer
-      customerSales: function(customerName){
-         return(
+      customerSales: function(customerName) {
+         return (
             knex('sales')
             .select(`id`, `name`)
             .innerJoin("customers", "sales.customer_id", '=', 'customers.id')
-            .where('name','=', customerName)
+            .where('name', '=', customerName)
          )
       },
       //list of cost/expensees instance for given customer
-      customerCost: function(customerId){
+      customerCost: function(customerId) {
          return (
             knex('costs')
             .select('*')
@@ -48,96 +53,96 @@ module.exports = function DecodeBotAPI(knex){
             .where('customers.id', customerId)
          )
       },
-      salesForGivenYear:function(year){
-         return(
+      salesForGivenYear: function(year) {
+         return (
             knex('sales')
             .select("*")
             .whereRaw(`YEAR(sales.createdAt) = ${year}`)
          )
       },
-      costForGivenYear: function(year){
-         return(
+      costForGivenYear: function(year) {
+         return (
             knex('costs')
             .select('*')
             .whereRaw(`YEAR(costs.createdAt) = ${year}`)
          )
       },
-      
+
       // Total Revenue (total dollar worth of sales)
-      totalRev: function(){
-         return(
+      totalRev: function() {
+         return (
             knex("sales").sum('sales.amount as Total_Sales')
-            .then(function(data){
+            .then(function(data) {
                return data[0];
             })
          )
       },
       // Total Revenue by YEAR(total dollar worth of sales)
-      totalRevYear: function(){
-         return(
+      totalRevYear: function() {
+         return (
             knex("sales")
-               .sum('sales.amount as Total_Sales')
-               .select(knex.raw('YEAR(sales.createdAt) AS Year'))
-               .groupByRaw('YEAR(sales.createdAt)')
+            .sum('sales.amount as Total_Sales')
+            .select(knex.raw('YEAR(sales.createdAt) AS Year'))
+            .groupByRaw('YEAR(sales.createdAt)')
          )
       },
       // Total Revenue by Month/year (total dollar worth of sales)
-      totalRevMonth: function(){
-         return(
+      totalRevMonth: function() {
+         return (
             knex('sales')
-               .sum('sales.amount as Total_Sales')
-               .select(knex.raw('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) AS Year'))
-               .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
+            .sum('sales.amount as Total_Sales')
+            .select(knex.raw('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) AS Year'))
+            .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
          )
       },
-      totalExpenses: function(){
-         return(
+      totalExpenses: function() {
+         return (
             knex('costs')
-               .sum('costs.amount as Total_Expenses')
-               .then(function(data){
-                  return data[0];
-               })
+            .sum('costs.amount as Total_Expenses')
+            .then(function(data) {
+               return data[0];
+            })
          )
       },
       //Average Deal Size (total sales amount / total sales)
-      avgDealSize: function(){
-         return(
-            knex('sales')
+      avgDealSize: function() {
+         return (
+               knex('sales')
                .count('sales.id as Amount_Of_Sales')
                .sum('sales.amount as Total_Sales')
                .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount"))
-         )
-         .then(data=>data[0])
+            )
+            .then(data => data[0])
       },
       //Average Deal Size per YEAR(total sales amount / total sales)
-      avgDealSizeYear: function(){
-         return(
+      avgDealSizeYear: function() {
+         return (
             knex('sales')
-               .count('sales.id as Amount_Of_Sales')
-               .sum('sales.amount as Total_Sales')
-               .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount, YEAR(sales.createdAt) as Year"))
-               .groupByRaw("YEAR(sales.createdAt)")
+            .count('sales.id as Amount_Of_Sales')
+            .sum('sales.amount as Total_Sales')
+            .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount, YEAR(sales.createdAt) as Year"))
+            .groupByRaw("YEAR(sales.createdAt)")
          )
       },
       //Average Deal SIze per Month(total sales amount / total sales)
-      avgDealSizeMonth: function(){
-         return(
+      avgDealSizeMonth: function() {
+         return (
             knex('sales')
-               .count('sales.id as Amount_Of_Sales')
-               .sum('sales.amount as Total_Sales')
-               .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount, MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year"))
-               .groupByRaw("YEAR(sales.createdAt), MONTH(sales.createdAt)")
+            .count('sales.id as Amount_Of_Sales')
+            .sum('sales.amount as Total_Sales')
+            .select(knex.raw("ROUND(SUM(sales.amount)/COUNT(sales.id),2) as Avg_Sale_Amount, MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year"))
+            .groupByRaw("YEAR(sales.createdAt), MONTH(sales.createdAt)")
          )
       },
       // Total Sales vs Total Cost     //We are double counting the Total Sales and Total Cost,  should we divide by 2 or use distinct
-      salesVsCost: function(){
-         return(
+      salesVsCost: function() {
+         return (
             knex.select(knex.raw('(SELECT SUM(sales.amount) FROM sales) AS Total_Sales, (SELECT ROUND(SUM(costs.amount),2) FROM costs) AS Total_Cost'))
          )
       },
       // Revenue for specific customer PER YEAR      (TABLE)    //WORKS//
-      customerRevenueYear: function(customerId){
-         return(
+      customerRevenueYear: function(customerId) {
+         return (
             knex('sales')
             .select('customers.name as Customer')
             .sum('sales.amount as Total_Revenue')
@@ -148,8 +153,8 @@ module.exports = function DecodeBotAPI(knex){
          )
       },
       // Revenue for specific customer PER MONTH      (TABLE)    //WORKS//
-      customerRevenueMonth: function(customerId){
-         return(
+      customerRevenueMonth: function(customerId) {
+         return (
             knex('sales')
             .select('customers.name as Customer')
             .sum('sales.amount as Total_Revenue')
@@ -160,27 +165,27 @@ module.exports = function DecodeBotAPI(knex){
          )
       },
       // Cost per customer    (table shows all customers)
-      costPerCustomer: function(){
-         return(
+      costPerCustomer: function() {
+         return (
             knex('costs')
-               .select('customers.name as Customer')
-               .sum('costs.amount as Total_Cost')
-               .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
-               .groupBy('customers.id')
-               .orderBy('Total_Cost', 'desc')
+            .select('customers.name as Customer')
+            .sum('costs.amount as Total_Cost')
+            .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
+            .groupBy('customers.id')
+            .orderBy('Total_Cost', 'desc')
          )
       },
       // Total Cost Per Sale (Sum of cost divided by amount individual sales)
-      costPerSale: function(){
-         return(
+      costPerSale: function() {
+         return (
             knex.select(knex.raw('ROUND((SELECT SUM(costs.amount) FROM costs) / (SELECT COUNT(sales.id) FROM sales),2) as Cost_Per_Sale'))
          )
       },
-      profits: function(){
-         return(
-            knex.select(knex.raw(`((select SUM(sales.amount) from sales) - (select SUM(costs.amount) from costs)) as Profit`))
-         )
-         .then(data => data[0])
+      profits: function() {
+         return (
+               knex.select(knex.raw(`((select SUM(sales.amount) from sales) - (select SUM(costs.amount) from costs)) as Profit`))
+            )
+            .then(data => data[0])
       },
       // barChartQuery: function(){
       //    var baseQuery = (
@@ -194,10 +199,10 @@ module.exports = function DecodeBotAPI(knex){
       //       .groupByRaw('all_months.id')
       //       .orderBy('all_months.id')
       //    ).as('baseQuery');
-         
+
       //    return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
       // },
-      barChartQuery: function(){
+      barChartQuery: function() {
          var baseQuery = (
             knex
             .select('all_months.name as Month')
@@ -209,36 +214,36 @@ module.exports = function DecodeBotAPI(knex){
             .groupByRaw('Month')
             .orderBy('all_months.id')
          ).as('baseQuery')
-         
-        return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
+
+         return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
       },
-      tableChart: function(){
-        return(
+      tableChart: function() {
+         return (
             knex('sales')
             .select('customers.name as Customers', 'sales.amount as Sales', 'sales.createdAt as Dates')
             .innerJoin('customers', 'customers.id', '=', 'sales.customer_id')
             .orderByRaw('Dates DESC')
             .limit(10)
-          ) 
+         )
       },
       //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)    %%%%%%
       /*For ALL DATA */
-      grossProfitMargin: function(){
-         return(
-            knex.select(knex.raw(`ROUND((((SELECT SUM(sales.amount)
+      grossProfitMargin: function() {
+         return (
+               knex.select(knex.raw(`ROUND((((SELECT SUM(sales.amount)
                                           FROM sales) - (
                                              SELECT SUM(costs.amount)
                                              from costs))/(
                                                 SELECT SUM(sales.amount)
                                                 FROM sales))*100, 2) AS Gross_Profit_Margin_Percent`))
-         )
-         .then(function(data){
-            return data[0];
-         })
+            )
+            .then(function(data) {
+               return data[0];
+            })
       },
       /* /////////////////////////////USING Year ///////////////////////////////////////////// */
-      grossProfitMarginYear: function(year){
-         return(
+      grossProfitMarginYear: function(year) {
+         return (
             knex.select(knex.raw(
                `ROUND((((SELECT SUM(sales.amount)
                   FROM sales WHERE YEAR(sales.createdAt) = "${year}") -
@@ -251,8 +256,8 @@ module.exports = function DecodeBotAPI(knex){
          )
       },
       /* ///////////////////////////////USING MONTH + Year ////////////////////////////////////////// */
-      grossProfitMarginMonth: function(month, year){
-         return(knex.select(knex.raw(`ROUND((((
+      grossProfitMarginMonth: function(month, year) {
+         return (knex.select(knex.raw(`ROUND((((
            SELECT SUM(sales.amount)
            FROM sales
            WHERE YEAR(sales.createdAt) = "${year}"
@@ -267,39 +272,67 @@ module.exports = function DecodeBotAPI(knex){
                AND MONTH(sales.createdAt) = "${month}"))*100, 2)
                AS GPM_m${month}_y${year}`)))
       },
-      topClients: function(){
-         return(
+      topClients: function() {
+         return (
             knex('customers')
-         .select(`customers.name as CompanyName`)
-         .sum('sales.amount as TotalSales')
-         .innerJoin('sales', 'sales.customer_id', '=', 'customers.id')
-         .groupBy('customers.id')
+            .select(`customers.name as CompanyName`)
+            .sum('sales.amount as TotalSales')
+            .innerJoin('sales', 'sales.customer_id', '=', 'customers.id')
+            .groupBy('customers.id')
          )
       },
-      createCustomer: function(info){
-         return (knex('customers').insert({name: info.name, createdAt: new Date()})
-            .then(function(customerInfo){
-               return knex('customers').select(`id`, 'name', 'createdAt').where('id',"=", customerInfo[0])
+      createCustomer: function(info) {
+         return (knex('customers').insert({
+               name: info.name,
+               createdAt: new Date()
             })
-            .then(customerReturn=> customerReturn[0])
-            .catch(function(err){
+            .then(function(customerInfo) {
+               return knex('customers').select(`id`, 'name', 'createdAt').where('id', "=", customerInfo[0])
+            })
+            .then(customerReturn => customerReturn[0])
+            .catch(function(err) {
                console.log(err, "   Alread existing in database");
             })
          )
       },
-      createSale: function(info){
-         return knex('sales').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
-            .then(function(saleInfo){
-               return knex('sales').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", saleInfo[0])
+      createSale: function(info) {  
+         return knex('sales').insert({
+               id: null,
+               customer_id: info.customer_id,
+               amount: info.amount,
+               createdAt: new Date()
+            }) //will this new Date () work?
+            .then(function(saleInfo) {
+               return knex('sales').select(`id`, 'customer_id', 'amount', 'createdAt').where('id', "=", saleInfo[0])
             })
-            .then(customerReturn=> customerReturn[0])
+            .then(saleReturn => saleReturn[0])
       },
-      createCost: function(info){
-         return knex('costs').insert({id: null, customer_id: info.customer_id, amount: info.amount, createdAt: new Date()}) //will this new Date () work?
-            .then(function(costInfo){
-               return knex('costs').select(`id`, 'customer_id', 'amount', 'createdAt').where('id',"=", costInfo[0])
+      createCost: function(info) {
+         return knex('costs').insert({
+               id: null,
+               customer_id: info.customer_id,
+               amount: info.amount,
+               createdAt: new Date()
+            }) //will this new Date () work?
+            .then(function(costInfo) {
+               return knex('costs').select(`id`, 'customer_id', 'amount', 'createdAt').where('id', "=", costInfo[0])
             })
-            .then(customerReturn=> customerReturn[0])
+            .then(costReturn => costReturn[0])
+      },
+      createGoal: function(info) {
+         return (
+            knex('goals').insert({
+               id: null,
+               amount: info.amount,
+               startDate: info.startDate || new Date(),
+               endDate: info.endDate,
+               createdAt: new Date()
+            })
+            .then(function(goalInfo){
+               return knex('goals').select('id', 'amount', 'startDate', 'endDate', 'createdAt', 'updatedAt').where('id', '=', goalInfo[0])
+            })
+            .then(goalReturn => goalReturn[0])
+         )
       }
    }
 }
@@ -309,75 +342,75 @@ module.exports = function DecodeBotAPI(knex){
 // mysql queries that are not being referenced by index.js
 
 
-      /* Per Year */
-      // numberOfSalesYear: function(){
-      //    return (
-      //       knex('sales')
-      //          .count("sales.id as Amount_Of_Sales")
-      //          .select(knex.raw(('YEAR(sales.createdAt) as Year')))
-      //             .groupByRaw('YEAR(sales.createdAt)')
-      //    )
-      // },
-      //    /* Per Month / Year */
-      // numberOfSalesMonth: function(){
-      //    return(
-      //       knex('sales')
-      //       .count("sales.id as Amount_Of_Sales")
-      //       .select(knex.raw(('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year')))
-      //          .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
-      //    )
-      // },
-      // //Total number of cost
-      // totalNumberCost: function(){
-      //    return(
-      //       knex("costs").count('costs.id as Amount_Of_Costs')
-      //    )
-      // },
-      // /* Per Year    */
-      // totalNumberCostYear: function(){
-      //  return(
-      //    knex('costs').count('costs.id')
-      //    .select(knex.raw('YEAR(costs.createdAt) as Year'))
-      //    .groupByRaw("Year(costs.createdAt)")
-      //    )
-      // },
-      // /* Per Month / Year      */
-      // totalNumberCostMonth: function(){
-      //    return(
-      //       knex('costs').count('costs.id')
-      //       .select(knex.raw('MONTH(costs.createdAt) as Month, YEAR(costs.createdAt) as Year'))
-      //       .groupByRaw('YEAR(costs.createdAt), MONTH(costs.createdAt)')
-      //    )
-      // },
-      //       // Cost for specific customer per year   (table)
-      // customerCostYear: function(customerId){
-      //    return(
-      //       knex('costs')
-      //          .select('customers.name as Name')
-      //          .sum('costs.amount as Total_Cost')
-      //          .select(knex.raw('YEAR(costs.createdAt) as Year'))
-      //          .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
-      //          .where('customers.id', customerId)
-      //          .groupByRaw('YEAR(costs.createdAt)')
-      //          .orderBy('Year', 'desc')
-      //    )
-      // },
-      // // Cost for specific customer per MONTH   (table)
-      // customerCostMonth: function(customerId){
-      //    return(
-      //       knex('costs')
-      //          .select('customers.name as Name')
-      //          .sum('costs.amount as Total_Cost')
-      //          .select(knex.raw('MONTH(costs.createdAt) as Month, YEAR(costs.createdAt) as Year'))
-      //          .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
-      //          .where('customers.id', customerId)
-      //          .groupByRaw('YEAR(costs.createdAt), MONTH(costs.createdAt)')
-      //          .orderBy('Year', 'Month', 'desc')
-      //    )
-      // },
-      //       // Total number of sales
-      // numberOfSales: function(){
-      //    return (
-      //       knex("sales").count("sales.id as Amount_Of_Sales")
-      //    )
-      // },
+/* Per Year */
+// numberOfSalesYear: function(){
+//    return (
+//       knex('sales')
+//          .count("sales.id as Amount_Of_Sales")
+//          .select(knex.raw(('YEAR(sales.createdAt) as Year')))
+//             .groupByRaw('YEAR(sales.createdAt)')
+//    )
+// },
+//    /* Per Month / Year */
+// numberOfSalesMonth: function(){
+//    return(
+//       knex('sales')
+//       .count("sales.id as Amount_Of_Sales")
+//       .select(knex.raw(('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year')))
+//          .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
+//    )
+// },
+// //Total number of cost
+// totalNumberCost: function(){
+//    return(
+//       knex("costs").count('costs.id as Amount_Of_Costs')
+//    )
+// },
+// /* Per Year    */
+// totalNumberCostYear: function(){
+//  return(
+//    knex('costs').count('costs.id')
+//    .select(knex.raw('YEAR(costs.createdAt) as Year'))
+//    .groupByRaw("Year(costs.createdAt)")
+//    )
+// },
+// /* Per Month / Year      */
+// totalNumberCostMonth: function(){
+//    return(
+//       knex('costs').count('costs.id')
+//       .select(knex.raw('MONTH(costs.createdAt) as Month, YEAR(costs.createdAt) as Year'))
+//       .groupByRaw('YEAR(costs.createdAt), MONTH(costs.createdAt)')
+//    )
+// },
+//       // Cost for specific customer per year   (table)
+// customerCostYear: function(customerId){
+//    return(
+//       knex('costs')
+//          .select('customers.name as Name')
+//          .sum('costs.amount as Total_Cost')
+//          .select(knex.raw('YEAR(costs.createdAt) as Year'))
+//          .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
+//          .where('customers.id', customerId)
+//          .groupByRaw('YEAR(costs.createdAt)')
+//          .orderBy('Year', 'desc')
+//    )
+// },
+// // Cost for specific customer per MONTH   (table)
+// customerCostMonth: function(customerId){
+//    return(
+//       knex('costs')
+//          .select('customers.name as Name')
+//          .sum('costs.amount as Total_Cost')
+//          .select(knex.raw('MONTH(costs.createdAt) as Month, YEAR(costs.createdAt) as Year'))
+//          .innerJoin('customers', 'costs.customer_id', '=', 'customers.id')
+//          .where('customers.id', customerId)
+//          .groupByRaw('YEAR(costs.createdAt), MONTH(costs.createdAt)')
+//          .orderBy('Year', 'Month', 'desc')
+//    )
+// },
+//       // Total number of sales
+// numberOfSales: function(){
+//    return (
+//       knex("sales").count("sales.id as Amount_Of_Sales")
+//    )
+// },

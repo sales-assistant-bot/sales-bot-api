@@ -107,6 +107,14 @@ app.get('/company', function(request, response){
     }
 })
 
+app.get('/goals', function(request, response){
+    decodeBotAPI
+    .allGoalInfo()
+    .then(data=>{
+        response.json(data);
+    })
+})
+
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 
@@ -146,6 +154,8 @@ app.post("/expenses", function(request, response){
         response.json(newCost);
     })
 })
+
+
 
 /* IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 /* IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII */

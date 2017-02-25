@@ -30,13 +30,13 @@ CREATE TABLE goals (
  updatedAt      DATETIME
 );
 
---Leads
+--Leads (use if we have time)
 
-CREATE TABLE leads (
- id             INT(11)         AUTO_INCREMENT      PRIMARY KEY,
- name           VARCHAR(50),
- createdAt      DATETIME,
- updatedAt      DATETIME,
- convertedAt    DATETIME,
- customer_id    INT(11)         REFERENCES customers(id)
-);
+-- CREATE TABLE leads (
+--  id             INT(11)         AUTO_INCREMENT      PRIMARY KEY,
+--  name           VARCHAR(50),
+--  createdAt      DATETIME,
+--  updatedAt      DATETIME,
+--  convertedAt    DATETIME,
+--  customer_id    INT(11)         REFERENCES customers(id)
+-- );
