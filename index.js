@@ -4,18 +4,18 @@ var app = express();
 var body_parser = require("body-parser");
 
 var knex = require("knex")({
-   dialect: 'mysql',
-   connection: {
-      host:'localhost',
-      user:"ajdez",
-       database: 'new_decode_bot'
-   }
+    dialect: 'mysql',
+    connection: {
+        host: 'localhost',
+        user: "ajdez",
+        database: 'new_decode_bot'
+    }
 });
 
 var decodeBotAPI = require("./backend")(knex)
 
 app.use(body_parser.json());
-    /* Is this below needed?*/
+/* Is this below needed?*/
 app.use(body_parser.urlencoded({
     extended: true
 }));
@@ -23,156 +23,162 @@ app.use(body_parser.urlencoded({
 
 
 
-app.get("/", function(request,response){
+app.get("/", function(request, response) {
     response.send(`<h1> Hello </h1>`)
 })
 
-app.get('/sales', function(request, response){
-    if(!_.isEmpty(request.query)){
-        if(request.query.name){
+app.get('/sales', function(request, response) {
+    if (!_.isEmpty(request.query)) {
+        if (request.query.name) {
             decodeBotAPI
-            .customerSales(request.query.name)
-            .then(data=>{
-                response.json(data);
-            })
+                .customerSales(request.query.name)
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if(request.query.year){
+        else if (request.query.year) {
             decodeBotAPI
-            .salesForGivenYear(request.query.year)
-            .then(data=>{
-                response.json(data);
-            })
+                .salesForGivenYear(request.query.year)
+                .then(data => {
+                    response.json(data);
+                })
         }
     }
-    else{
+    else {
         decodeBotAPI
-        .allSaleInfo()
-        .then(data=>{
-            response.json(data); //returning all information in the Stringified format so that it can get passed through the http protocal
-        })
+            .allSaleInfo()
+            .then(data => {
+                response.json(data); //returning all information in the Stringified format so that it can get passed through the http protocal
+            })
     }
 })
 
-app.get('/expenses', function(request, response){
-    if(!_.isEmpty(request.query)){
-        if(request.query.companyId){
+app.get('/expenses', function(request, response) {
+    if (!_.isEmpty(request.query)) {
+        if (request.query.companyId) {
             decodeBotAPI
-            .customerCost(request.query.companyId)
-            .then(data=>{
-                response.json(data);
-            })
+                .customerCost(request.query.companyId)
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.year){
+        else if (request.query.year) {
             decodeBotAPI
-            .costForGivenYear(request.query.year)
-            .then(data=>{
-                response.json(data);
-            })
+                .costForGivenYear(request.query.year)
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.costPerCustomer){
+        else if (request.query.costPerCustomer) {
             decodeBotAPI
-            .costPerCustomer()
-            .then(data=>{
-                response.json(data);
-            })
+                .costPerCustomer()
+                .then(data => {
+                    response.json(data);
+                })
         }
     }
-    else{
+    else {
         decodeBotAPI
-        .allSaleInfo()
-        .then(data=>{
-            response.json(data);
-            //same as writing  "response.send(JSON.stringify(data))"
-        })
+            .allSaleInfo()
+            .then(data => {
+                response.json(data);
+                //same as writing  "response.send(JSON.stringify(data))"
+            })
     }
 })
 
 //Put more queries attached to the customers
-app.get('/company', function(request, response){
-    if(!_.isEmpty(request.query)){
-        if(request.query.name){
+app.get('/company', function(request, response) {
+    if (!_.isEmpty(request.query)) {
+        if (request.query.name) {
             decodeBotAPI
-            .customerInfoByName(request.query.name)
-            .then(data=>{
-                response.json(data);
-            })
+                .customerInfoByName(request.query.name)
+                .then(data => {
+                    response.json(data);
+                })
         }
     }
-    else{
+    else {
         decodeBotAPI
-        .allCustomerInfo()
-        .then(data=>{
+            .allCustomerInfo()
+            .then(data => {
+                response.json(data);
+            })
+    }
+})
+
+app.get('/goals', function(request, response) {
+    decodeBotAPI
+        .allGoalInfo()
+        .then(data => {
             response.json(data);
         })
-    }
-})
-
-app.get('/goals', function(request, response){
-    decodeBotAPI
-    .allGoalInfo()
-    .then(data=>{
-        response.json(data);
-    })
 })
 
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 /*IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
 
 
-app.post("/company", function(request, response){
-    if(!request.body.name){
-        response.json({error: 'no name query string provided, please use ?name=NAME'});
+app.post("/company", function(request, response) {
+    if (!request.body.name) {
+        response.json({
+            error: 'no name query string provided, please use ?name=NAME'
+        });
     }
     decodeBotAPI
-    .createCustomer(request.body)
-    .then(newUser=>{
-        response.json(newUser);
-    })
-    .catch(console.log)
+        .createCustomer(request.body)
+        .then(newUser => {
+            response.json(newUser);
+        })
+        .catch(console.log)
 })
 
 
-app.post("/sales", function(request, response){
-    if(!request.body.customer_id){
-        response.json({error: "must connect sale to specific customer. Please add the customer_id"})
-    }
-    else if (!request.body.amount){
-        response.json({error: "Please enter a Sale Amount"})
+app.post("/sales", function(request, response) {
+    if (!request.body.customer_id) {
+        response.json({
+            error: "must connect sale to specific customer. Please add the customer_id"
+        })
     }
     decodeBotAPI
-    .createSale(request.body)
-    .then(newSale=>{
-        response.json(newSale);
-    })
+        .createSale(request.body)
+        .then(newSale => {
+            response.json(newSale);
+        })
 })
 
 
-app.post("/expenses", function(request, response){
-    if(!request.body.customer_id){
-        response.json({error: "Must connect expense to specific customer. Please add the customer_id"})
-    }
-    else if(!request.body.amount){
-        response.json({error: "Please enter a Cost Amount"})
+app.post("/expenses", function(request, response) {
+    if (!request.body.customer_id) {
+        response.json({
+            error: "Must connect expense to specific customer. Please add the customer_id"
+        })
     }
     decodeBotAPI
-    .createCost(request.body)
-    .then(newCost=>{
-        response.json(newCost);
-    })
+        .createCost(request.body)
+        .then(newCost => {
+            response.json(newCost);
+        })
 })
 
-app.post("/goals", function(request, response){
-    if(!request.body.amount){
-        response.json({error: "Please enter a Goal"})
+app.post("/goals", function(request, response) {
+    if (!request.body.amount) {
+        response.json({
+            error: "Please enter a Goal"
+        })
     }
-    else if(!request.body.endDate){
-        response.json({error: "please enter a date in which the goal ends"})
+    else if (!request.body.endDate) {
+        response.json({
+            error: "please enter a date in which the goal ends"
+        })
     }
-    decodeBotAPI
-    .createGoal(request.body)
-    .then(newGoal=>{
-        response.json(newGoal);
-    })
+    else {
+        decodeBotAPI
+            .createGoal(request.body)
+            .then(newGoal => {
+                response.json(newGoal);
+            })
+    }
 })
 
 /* IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII*/
@@ -180,153 +186,153 @@ app.post("/goals", function(request, response){
 
 
 
-app.get('/reports', function(request, response){
-    if(!_.isEmpty(request.query)){
-        if (request.query.costPerCustomer !== undefined){
+app.get('/reports', function(request, response) {
+    if (!_.isEmpty(request.query)) {
+        if (request.query.costPerCustomer !== undefined) {
             decodeBotAPI
-            .costPerCustomer()
-            .then(data=>{
-                response.json(data);
-            })
+                .costPerCustomer()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.totalRev  !== undefined){
+        else if (request.query.totalRev !== undefined) {
             //total revenue (from all years)
             decodeBotAPI
-            .totalRev()
-            .then(data=>{
-                response.json(data);
-            })
+                .totalRev()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.totalRevYear !== undefined){
+        else if (request.query.totalRevYear !== undefined) {
             //total revenue by year
             decodeBotAPI
-            .totalRevYear()
-            .then(data=>{
-                response.json(data);
-            })
+                .totalRevYear()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.totalRevMonth !== undefined){
+        else if (request.query.totalRevMonth !== undefined) {
             //total revenue (from all years)
             decodeBotAPI
-            .totalRevMonth()
-            .then(data=>{
-                response.json(data);
-            })
+                .totalRevMonth()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.totalExpenses !== undefined){
+        else if (request.query.totalExpenses !== undefined) {
             //total expenses
             decodeBotAPI
-            .totalExpenses()
-            .then(data=>{
-                response.json(data);
-            })
+                .totalExpenses()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.avgDealSize !== undefined){
+        else if (request.query.avgDealSize !== undefined) {
             //average deal size
             decodeBotAPI
-            .avgDealSize()
-            .then(data=>{
-                response.json(data);
-            })
+                .avgDealSize()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.avgDealSizeYear !== undefined){
+        else if (request.query.avgDealSizeYear !== undefined) {
             //average deal size by year
             decodeBotAPI
-            .avgDealSizeYear()
-            .then(data=>{
-                response.json(data);
-            })
+                .avgDealSizeYear()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.avgDealSizeMonth !== undefined){
+        else if (request.query.avgDealSizeMonth !== undefined) {
             //average deal size by month, year
             decodeBotAPI
-            .avgDealSizeMonth()
-            .then(data=>{
-                response.json(data);
-            })
+                .avgDealSizeMonth()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.salesVsCost !== undefined){
+        else if (request.query.salesVsCost !== undefined) {
             //This query will be useful for graphs
             decodeBotAPI
-            .salesVsCost()
-            .then(data=>{
-                response.json(data);
-            })
+                .salesVsCost()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.customerRevenueYear){ //Needs customer ID as input
+        else if (request.query.customerRevenueYear) { //Needs customer ID as input
             decodeBotAPI
-            .customerRevenueYear(request.query.customerRevenueYear) //NEEDS customer.id AS INPUT
-            .then(data=>{
-                response.json(data);
-            })
+                .customerRevenueYear(request.query.customerRevenueYear) //NEEDS customer.id AS INPUT
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.customerRevenueMonth){ //Needs customer ID as input
+        else if (request.query.customerRevenueMonth) { //Needs customer ID as input
             decodeBotAPI
-            .customerRevenueMonth(request.query.customerRevenueMonth)//NEEDS customer.id AS INPUT
-            .then(data=>{
-                response.json(data);
-            })
+                .customerRevenueMonth(request.query.customerRevenueMonth) //NEEDS customer.id AS INPUT
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.costPerSale !== undefined){
+        else if (request.query.costPerSale !== undefined) {
             decodeBotAPI
-            .costPerSale()
-            .then(data=>{
-                response.json(data);
-            })
+                .costPerSale()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.topClients !== undefined){
+        else if (request.query.topClients !== undefined) {
             decodeBotAPI
-            .topClients()
-            .then(data=>{
-                response.json(data);
-            })
+                .topClients()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.profits !== undefined){
+        else if (request.query.profits !== undefined) {
             decodeBotAPI
-            .profits()
-            .then(data=>{
-                response.json(data);
-            })
+                .profits()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.grossProfitMargin !== undefined){
+        else if (request.query.grossProfitMargin !== undefined) {
             //gross profit margin since beg of time
             decodeBotAPI
-            .grossProfitMargin()
-            .then(data=>{
-                response.json(data);
-            })
+                .grossProfitMargin()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.grossProfitMarginYear){
+        else if (request.query.grossProfitMarginYear) {
             //gross profit margin since beg of time
             decodeBotAPI
-            .grossProfitMarginYear(request.query.grossProfitMarginYear)
-            .then(data=>{
-                response.json(data);
-            })
+                .grossProfitMarginYear(request.query.grossProfitMarginYear)
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.barChartQuery !== undefined){
+        else if (request.query.barChartQuery !== undefined) {
             decodeBotAPI
-            .barChartQuery()
-            .then(data=>{
-                response.json(data);
-            })
+                .barChartQuery()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.tableChart !== undefined){
+        else if (request.query.tableChart !== undefined) {
             decodeBotAPI
-            .tableChart()
-            .then(data=>{
-                response.json(data);
-            })
+                .tableChart()
+                .then(data => {
+                    response.json(data);
+                })
         }
-        else if (request.query.goalGauge !== undefined){
+        else if (request.query.goalGauge !== undefined) {
             decodeBotAPI
-            .goalGauge()
-            .then(data=>{
-                response.json(data)
-            })
+                .goalGauge()
+                .then(data => {
+                    response.json(data)
+                })
         }
     }
-    else{
+    else {
         response.send(`<h1>Pick a type of report to generate</h1>`)
     }
 })
