@@ -187,36 +187,48 @@ module.exports = function DecodeBotAPI(knex) {
             )
             .then(data => data[0])
       },
-      // barChartQuery: function(){
+      barChartQuery: function(){
+         var sales = (
+            knex('sales')
+               .sum('sales.amount as total_sales')
+               .select(knex.raw('MONTH(sales.createdAt) as month'))
+               .groupByRaw('MONTH(sales.createdAt)')
+         ).as('sales')
+         
+         var costs = (
+            knex('costs')
+               .sum('costs.amount as total_costs')
+               .select(knex.raw('MONTH(costs.createdAt) as month'))
+               .groupByRaw('MONTH(costs.createdAt)')
+         ).as('costs')
+         
+         return(
+            knex
+               .select('all_months.name as Month')
+               .select(knex.raw('coalesce(sales.total_sales, 0) as Sales'))
+               .select(knex.raw('coalesce(costs.total_costs, 0) as Costs'))
+               .select(knex.raw('(coalesce(sales.total_sales, 0)-coalesce(costs.total_costs,0)) as Profits'))
+               .from('all_months')
+               .leftJoin(sales, 'all_months.id', '=', 'sales.month')
+               .leftJoin(costs, 'all_months.id', '=', 'costs.month')
+               .orderBy('all_months.id')
+         )
+      },
+      // barChartQuery: function() {
       //    var baseQuery = (
       //       knex
       //       .select('all_months.name as Month')
-      //       .select(knex.raw('COALESCE(SUM(sales.amount), 0) as Sales'))
-      //       .select(knex.raw('COALESCE(SUM(costs.amount), 0) as Costs'))
+      //       .select(knex.raw('COALESCE(SUM(distinct sales.amount), 0) as Sales'))
+      //       .select(knex.raw('COALESCE(SUM(distinct costs.amount), 0) as Costs'))
       //       .from('all_months')
-      //       .leftJoin(`sales`,'all_months.id', knex.raw('MONTH(sales.createdAt)'))
-      //       .leftJoin('costs', 'all_months.id', knex.raw('MONTH(costs.createdAt)'))
-      //       .groupByRaw('all_months.id')
+      //       .leftJoin(knex.raw(`sales on all_months.id = MONTH(sales.createdAt)`))
+      //       .leftJoin(knex.raw(`costs on all_months.id = MONTH(costs.createdAt)`))
+      //       .groupByRaw('Month')
       //       .orderBy('all_months.id')
-      //    ).as('baseQuery');
+      //    ).as('baseQuery')
 
       //    return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
       // },
-      barChartQuery: function() {
-         var baseQuery = (
-            knex
-            .select('all_months.name as Month')
-            .select(knex.raw('COALESCE(SUM(distinct sales.amount), 0) as Sales'))
-            .select(knex.raw('COALESCE(SUM(distinct costs.amount), 0) as Costs'))
-            .from('all_months')
-            .leftJoin(knex.raw(`sales on all_months.id = MONTH(sales.createdAt)`))
-            .leftJoin(knex.raw(`costs on all_months.id = MONTH(costs.createdAt)`))
-            .groupByRaw('Month')
-            .orderBy('all_months.id')
-         ).as('baseQuery')
-
-         return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
-      },
       tableChart: function() {
          return (
             knex('sales')
