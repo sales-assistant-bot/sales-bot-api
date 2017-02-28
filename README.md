@@ -135,7 +135,7 @@ List of Technologies:
 ###### Retrieves all costs from specific year
 * String: `?year`
 * example output: 
-```{
+```json{
 "id": 1,
 "customer_id": 1,
 "amount": 350,
