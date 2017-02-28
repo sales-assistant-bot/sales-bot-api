@@ -5,10 +5,7 @@ Sales Bot is a tool that allows salespeople to interact with a message bot that 
 ## Getting Started
 ### Install
 ```sh
-npm install lodash
-npm install express
-npm install body-parser
-npm install knex
+npm install
 ```
 
 ## Built Using
@@ -41,11 +38,15 @@ List of Technologies:
 ##### End Point
 ###### Retrieves all customers from database
 * `https://decode-bot-project-sql-ajdez.c9users.io/company`
-* ouput example: `{
-id: 1,
-name: "DecodeMTL",
-createdAt: "2017-02-15T20:38:27.000Z"
-}`
+* ouput example:
+
+```json
+{
+  "id": 1,
+  "name": "DecodeMTL",
+  "createdAt": "2017-02-15T20:38:27.000Z"
+}
+```
 
 ##### Query String Parameters Option(s)
 ###### Retrieves ID for specific customer
