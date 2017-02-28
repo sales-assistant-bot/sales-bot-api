@@ -331,6 +331,13 @@ app.get('/reports', function(request, response) {
                     response.json(data)
                 })
         }
+        else if (request.query.goalsAchieved !== undefined){
+            decodeBotAPI
+                .goalsAchieved()
+                .then(data=>{
+                    response.json(data)
+                })
+        }
     }
     else {
         response.send(`<h1>Pick a type of report to generate</h1>`)

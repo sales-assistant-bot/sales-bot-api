@@ -214,28 +214,13 @@ module.exports = function DecodeBotAPI(knex) {
                .orderBy('all_months.id')
          )
       },
-      // barChartQuery: function() {
-      //    var baseQuery = (
-      //       knex
-      //       .select('all_months.name as Month')
-      //       .select(knex.raw('COALESCE(SUM(distinct sales.amount), 0) as Sales'))
-      //       .select(knex.raw('COALESCE(SUM(distinct costs.amount), 0) as Costs'))
-      //       .from('all_months')
-      //       .leftJoin(knex.raw(`sales on all_months.id = MONTH(sales.createdAt)`))
-      //       .leftJoin(knex.raw(`costs on all_months.id = MONTH(costs.createdAt)`))
-      //       .groupByRaw('Month')
-      //       .orderBy('all_months.id')
-      //    ).as('baseQuery')
-
-      //    return knex.select('Month', 'Sales', 'Costs', knex.raw('Sales - Costs AS Profits')).from(baseQuery);
-      // },
       tableChart: function() {
          return (
             knex('sales')
             .select('customers.name as Customers', 'sales.amount as Sales', 'sales.createdAt as Dates')
             .innerJoin('customers', 'customers.id', '=', 'sales.customer_id')
             .orderByRaw('Dates DESC')
-            .limit(10)
+            .limit(5)
          )
       },
       //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)    %%%%%%
@@ -303,6 +288,23 @@ module.exports = function DecodeBotAPI(knex) {
             .from('sales')
             .innerJoin(knex.raw(`goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)`))
             .groupBy('goals.id')
+         )
+      },
+      goalsAchieved: function(){
+         var goals = (
+            knex
+               .select('goals.id as ID')
+               .select(knex.raw('(goals.amount - sum(sales.amount)) as amountTo'))
+               .from('sales')
+               .innerJoin(knex.raw('goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)'))
+               .groupBy('goals.id')
+               .having('amountTo','<=', 0)
+            ).as('goals')
+         
+         return(
+            knex
+               .count(`goals.ID as goalsCompleted`)
+               .from(goals)
          )
       },
       createCustomer: function(info) {

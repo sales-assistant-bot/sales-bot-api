@@ -45,7 +45,7 @@ CREATE TABLE goals (
 
 
 
- 
+-- GOals
 select goals.id, goals.amount as GoalAmount, 
        sum(sales.amount) as CurrentAmount, 
        (goals.amount - sum(sales.amount)) as AmountMissing, 
@@ -57,25 +57,19 @@ group by goals.id;
 
 
 
-select count(goals.id)
-from sales
-join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)
-where (select (goals.amount - sum(sales.amount)) as value
-       from sales
-       join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)
-       group by goals.id) <= 0
-group by goals.id;
+-- Goals Amount
+select count(goals.ID)
+ from (
+        select goals.id as ID, (goals.amount - sum(sales.amount)) as amountTo
+        from sales
+        join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)
+        group by goals.id
+        having amountTo <= 0 
+  ) as goals;
 
 
 
-
-select count(goals.id), (goals.amount - sum(sales.amount)) as value
-from sales
-join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt)
-where 0 > (select (goals.amount - sum(sales.amount) from sales join goals on (goals.startDate <= sales.createdAt AND goals.endDate >= sales.createdAt group by goals.id)))
-group by goals.id;
-
-
+-- BAR CHART QUERY COMPLETE
 select all_months.name as Month,
        coalesce(sales.total_sales, 0) as Sales,
        coalesce(costs.total_costs, 0) as Costs,
