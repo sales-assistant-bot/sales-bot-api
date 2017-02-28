@@ -1,18 +1,24 @@
+# Introduction
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+Sales Bot is a tool that allows salespeople to interact with a message bot that acts like a sales assistant. Relevant information relating to the users Clients, Sales, Costs, and Performance Goals gathered and sent to the Sales Bot API. The API will receive the gathered information, store it, and can be called in order to recieve the relevant `JSON` from the request
 
+## Getting Started
+### Install
+```sh
+npm install lodash
+npm install express
+npm install body-parser
+npm install knex
+```
 
-Hi there! Welcome to Cloud9 IDE!
+## Built Using
+List of Technologies:
+* Node.js
+* Express
+* MySQL
+* knex.js
 
-To get you started, create some files, play with the terminal,
-or visit http://docs.c9.io for our documentation.
-If you want, you can also go watch some training videos at
-http://www.youtube.com/user/c9ide.
-
-Happy coding!
-The Cloud9 IDE team# decodemtl_bot_Project
+## Authors
+* [Anthony Desormeau](https://github.com/ajdez)
+* [Randy Klose](https://github.com/Randyklose)
+* [Joseph Melanson](https://github.com/joemelanson)
