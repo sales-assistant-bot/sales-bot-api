@@ -51,83 +51,103 @@ List of Technologies:
 ##### Query String Parameters Option(s)
 ###### Retrieves ID for specific customer
  * String: `?name`
- * ouput example: `{
-id: 1
-}`
+ * ouput example:
+```json
+{
+   "id": 1
+}
+```
 
 
 #### Sales
 ##### End Point
 ###### Retrieves all sales from database
 * `https://decode-bot-project-sql-ajdez.c9users.io/sales`
-* ouput example: `{
-id: 1,
-customer_id: 1,
-amount: 500,
-createdAt: "2017-02-26T20:38:27.000Z"
-}`
+* ouput example: 
+``` json
+{
+"id": 1,
+"customer_id": 1,
+"amount": 500,
+"createdAt": "2017-02-26T20:38:27.000Z"
+}
+```
 
 ##### Query String Parameters Option(s)
 ###### Retrieves all sales data from specific customer
 * String: `?name`
-* ouput example: `{
-id: 1,
-name: "DecodeMTL",
-amount: 500,
-createdAt: "2017-02-26T20:38:27.000Z"
-}`
+* ouput example: 
+```json
+{
+"id": 1,
+"name": "DecodeMTL",
+"amount": 500,
+"createdAt": "2017-02-26T20:38:27.000Z"
+}
+```
 
 ###### Retrieves all sales data from specific Year
 * String: `?year`
-* output example: `{
-id: 1,
-customer_id: 1,
-amount: 500,
-createdAt: "2017-02-26T20:38:27.000Z"
+* output example: 
+```json
+{
+"id": 1,
+"customer_id": 1,
+"amount": 500,
+"createdAt": "2017-02-26T20:38:27.000Z"
 },
 {
-id: 2,
-customer_id: 1,
-amount: 750,
-createdAt: "2017-02-27T22:18:27.000Z"
-}`
+"id": 2,
+"customer_id": 1,
+"amount": 750,
+"createdAt": "2017-02-27T22:18:27.000Z"
+}
+```
 
 #### Costs
 ##### End Point
 ###### Retrieves all costs from database
 * `https://decode-bot-project-sql-ajdez.c9users.io/expenses`
-* example output: `{
-id: 1,
-customer_id: 1,
-amount: 500,
-createdAt: "2017-02-26T20:38:27.000Z"
-}`
+* example output: 
+```json
+{
+"id": 1,
+"customer_id": 1,
+"amount": 500,
+"createdAt": "2017-02-26T20:38:27.000Z"
+}
+```
 
 ##### Query String Parameters Option(s)
 ###### Retrieves all costs from specific customer id
 * String: `?companyId`
-* example output: `{
-id: 2,
-customer_id: 2,
-amount: 1300,
-createdAt: "2017-02-18T21:34:27.000Z",
-name: "Google"
-}`
+* example output: 
+```json
+{
+"id": 2,
+"customer_id": 2,
+"amount": 1300,
+"createdAt": "2017-02-18T21:34:27.000Z",
+"name": "Google"
+}
+```
 
 ###### Retrieves all costs from specific year
 * String: `?year`
-* example output: `{
-id: 1,
-customer_id: 1,
-amount: 350,
-createdAt: "2017-02-26T12:33:27.000Z"
+* example output: 
+```{
+"id": 1,
+"customer_id": 1,
+"amount": 350,
+"createdAt": "2017-02-26T12:33:27.000Z"
 },
 {
-id: 2,
-customer_id: 1,
-amount: 520,
-createdAt: "2017-03-05T22:38:27.000Z"
-}`
+"id": 2,
+"customer_id": 1,
+"amount": 520,
+"createdAt": "2017-03-05T22:38:27.000Z"
+}
+```
 
 
 #### Reports
