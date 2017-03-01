@@ -250,7 +250,7 @@ List of Technologies:
 * output example:
 ```json
 {
-  "Customer"s: "DecodeMTL",
+  "Customers": "DecodeMTL",
   "Sales": 2600,
   "Dates": "2017-04-27T22:32:27.000Z"
 },
@@ -272,19 +272,19 @@ List of Technologies:
 ```json
 {
   "id: 1,
-  "GoalAmount"": 20000,
-  "CurrentAmount"": 25690,
-  "AmountMissing"": -5690,
-  "StartDate"": "2017-02-20T00:00:00.000Z",
-  "EndDate"": "2017-05-20T00:00:00.000Z"
+  "GoalAmount": 20000,
+  "CurrentAmount": 25690,
+  "AmountMissing": -5690,
+  "StartDate": "2017-02-20T00:00:00.000Z",
+  "EndDate": "2017-05-20T00:00:00.000Z"
 },
 {
   "id"": 2,
-  "GoalAmount"": 11000,
-  "CurrentAmount"": 12600,
-  "AmountMissing"": -1600,
-  "StartDate"": "2017-02-01T00:00:00.000Z",
-  "EndDate"": "2017-02-28T00:00:00.000Z"
+  "GoalAmount": 11000,
+  "CurrentAmount": 12600,
+  "AmountMissing": -1600,
+  "StartDate": "2017-02-01T00:00:00.000Z",
+  "EndDate": "2017-02-28T00:00:00.000Z"
 },
 {
   "id": 4,
