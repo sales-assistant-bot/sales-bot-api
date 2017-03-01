@@ -66,10 +66,10 @@ List of Technologies:
 * ouput example: 
 ``` json
 {
-"id": 1,
-"customer_id": 1,
-"amount": 500,
-"createdAt": "2017-02-26T20:38:27.000Z"
+  "id": 1,
+  "customer_id": 1,
+  "amount": 500,
+  "createdAt": "2017-02-26T20:38:27.000Z"
 }
 ```
 
@@ -79,10 +79,10 @@ List of Technologies:
 * ouput example: 
 ```json
 {
-"id": 1,
-"name": "DecodeMTL",
-"amount": 500,
-"createdAt": "2017-02-26T20:38:27.000Z"
+  "id": 1,
+  "name": "DecodeMTL",
+  "amount": 500,
+  "createdAt": "2017-02-26T20:38:27.000Z"
 }
 ```
 
@@ -91,16 +91,16 @@ List of Technologies:
 * output example: 
 ```json
 {
-"id": 1,
-"customer_id": 1,
-"amount": 500,
-"createdAt": "2017-02-26T20:38:27.000Z"
+  "id": 1,
+  "customer_id": 1,
+  "amount": 500,
+  "createdAt": "2017-02-26T20:38:27.000Z"
 },
 {
-"id": 2,
-"customer_id": 1,
-"amount": 750,
-"createdAt": "2017-02-27T22:18:27.000Z"
+  "id": 2,
+  "customer_id": 1,
+  "amount": 750,
+  "createdAt": "2017-02-27T22:18:27.000Z"
 }
 ```
 
@@ -111,10 +111,10 @@ List of Technologies:
 * example output: 
 ```json
 {
-"id": 1,
-"customer_id": 1,
-"amount": 500,
-"createdAt": "2017-02-26T20:38:27.000Z"
+  "id": 1,
+  "customer_id": 1,
+  "amount": 500,
+  "createdAt": "2017-02-26T20:38:27.000Z"
 }
 ```
 
@@ -124,40 +124,127 @@ List of Technologies:
 * example output: 
 ```json
 {
-"id": 2,
-"customer_id": 2,
-"amount": 1300,
-"createdAt": "2017-02-18T21:34:27.000Z",
-"name": "Google"
+  "id": 2,
+  "customer_id": 2,
+  "amount": 1300,
+  "createdAt": "2017-02-18T21:34:27.000Z",
+  "name": "Google"
 }
 ```
 
 ###### Retrieves all costs from specific year
 * String: `?year`
 * example output: 
-```json{
-"id": 1,
-"customer_id": 1,
-"amount": 350,
-"createdAt": "2017-02-26T12:33:27.000Z"
+```json
+{
+  "id": 1,
+  "customer_id": 1,
+  "amount": 350,
+  "createdAt": "2017-02-26T12:33:27.000Z"
 },
 {
-"id": 2,
-"customer_id": 1,
-"amount": 520,
-"createdAt": "2017-03-05T22:38:27.000Z"
+  "id": 2,
+  "customer_id": 1,
+  "amount": 520,
+  "createdAt": "2017-03-05T22:38:27.000Z"
 }
 ```
 
 
 #### Reports
-?totalRev
-?totalExpenses
-?avgDealSize
-?topClients
-?profits
-?grossProfitMargin
-?barChartQuery
+##### End Point
+`https://decode-bot-project-sql-ajdez.c9users.io/reports`
+
+##### Query String Parameters Option(s)
+###### Retrieves users total revenue
+* String: `?totalRev`
+* ouput Example: 
+```json
+{
+  "Total_Sales": 29790
+}
+```
+
+###### Retrieves users total expenses
+* String: `?totalExpenses`
+* output example: 
+```json
+{
+  "Total_Expenses": 16320
+}
+```
+
+###### Retrieves average deal size of users sales
+* String: `?avgDealSize`
+* output example: 
+```json
+{
+  "Amount_Of_Sales": 25,
+  "Total_Sales": 29790,
+  "Avg_Sale_Amount": 1191.6
+}
+```
+
+###### Retrieves list of customers and amount of revenue generated from them
+* String: `?topClients`
+* output example: 
+```json
+{
+  "CompanyName": "DecodeMTL",
+  "TotalSales": 6750
+},
+{
+  "CompanyName": "Google",
+  "TotalSales": 7670
+},
+{
+  "CompanyName": "Pixar",
+  "TotalSales": 8360
+}
+```
+
+###### Retrieves user total profits
+* String: `?profits`
+* output example: 
+```json
+{
+  "Profit": 13470
+}
+```
+
+###### Retrieves users Gross Profit Margin
+* String: `?grossProfitMargin`
+* output example: 
+```json
+{
+  "Gross_Profit_Margin_Percent": 45.22
+}
+```
+
+###### Retrieves users Sales, Costs, Profits for each Month
+* String: `?barChartQuery`
+* output example: 
+```json
+{
+  "Month": "January",
+  "Sales": 400,
+  "Costs": 200,
+  "Profits": 200
+},
+{
+  "Month": "February",
+  "Sales": 13000,
+  "Costs": 5970,
+  "Profits": 7030
+},
+{
+  "Month": "March",
+  "Sales": 5700,
+  "Costs": 4290,
+  "Profits": 1410
+}
+```
+
 ?tableChart
 ?goalGauge
 ?goalsAchieved
