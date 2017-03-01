@@ -271,7 +271,7 @@ List of Technologies:
 * output string: 
 ```json
 {
-  "id: 1,
+  "id": 1,
   "GoalAmount": 20000,
   "CurrentAmount": 25690,
   "AmountMissing": -5690,
@@ -279,7 +279,7 @@ List of Technologies:
   "EndDate": "2017-05-20T00:00:00.000Z"
 },
 {
-  "id"": 2,
+  "id": 2,
   "GoalAmount": 11000,
   "CurrentAmount": 12600,
   "AmountMissing": -1600,
