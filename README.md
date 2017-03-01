@@ -245,12 +245,65 @@ List of Technologies:
 }
 ```
 
-?tableChart
-?goalGauge
-?goalsAchieved
+###### Retrieves Company name, amount sold, and date of transaction
+* String: `?tableChart`
+* output example:
+```json
+{
+  "Customer"s: "DecodeMTL",
+  "Sales": 2600,
+  "Dates": "2017-04-27T22:32:27.000Z"
+},
+{
+  "Customers": "Google",
+  "Sales": 650,
+  "Dates": "2017-04-26T20:38:27.000Z"
+},
+{
+  "Customers": "Pixar",
+  "Sales": 1650,
+  "Dates": "2017-04-26T20:38:27.000Z"
+}
+```
 
+###### Retrieves Goal Amount (what the goal was set at), Current Amount (progress), Amount missing until goal is reached, Goal Start and End date
+* String: `?goalGauge`
+* output string: 
+```json
+{
+  "id: 1,
+  "GoalAmount"": 20000,
+  "CurrentAmount"": 25690,
+  "AmountMissing"": -5690,
+  "StartDate"": "2017-02-20T00:00:00.000Z",
+  "EndDate"": "2017-05-20T00:00:00.000Z"
+},
+{
+  "id"": 2,
+  "GoalAmount"": 11000,
+  "CurrentAmount"": 12600,
+  "AmountMissing"": -1600,
+  "StartDate"": "2017-02-01T00:00:00.000Z",
+  "EndDate"": "2017-02-28T00:00:00.000Z"
+},
+{
+  "id": 4,
+  "GoalAmount": 500,
+  "CurrentAmount": 400,
+  "AmountMissing": 100,
+  "StartDate": "2017-01-01T00:00:00.000Z",
+  "EndDate": "2017-01-31T00:00:00.000Z"
+}
+```
 
-
+###### Retrieves number of times user achieved a set out goal
+* String: `?goalsAchieved`
+* output example:
+```json
+{
+  "goalsCompleted": 3
+}
+```
 
 
 
