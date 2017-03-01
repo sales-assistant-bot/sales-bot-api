@@ -151,6 +151,17 @@ List of Technologies:
 
 
 #### Reports
+?totalRev
+?totalExpenses
+?avgDealSize
+?topClients
+?profits
+?grossProfitMargin
+?barChartQuery
+?tableChart
+?goalGauge
+?goalsAchieved
+
 
 
 
