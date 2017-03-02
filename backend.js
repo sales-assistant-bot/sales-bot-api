@@ -40,7 +40,7 @@ module.exports = function DecodeBotAPI(knex) {
       customerSales: function(customerName) {
          return (
             knex('sales')
-            .select(`id`, `name`)
+            .select(`sales.id`, `customers.name`, 'sales.amount', 'sales.createdAt')
             .innerJoin("customers", "sales.customer_id", '=', 'customers.id')
             .where('name', '=', customerName)
          )
@@ -127,6 +127,7 @@ module.exports = function DecodeBotAPI(knex) {
                .leftJoin(sales, 'all_months.id', '=', 'sales.month')
                .leftJoin(costs, 'all_months.id', '=', 'costs.month')
                .orderBy('all_months.id')
+               .limit(6)
          )
       },
       tableChart: function() {
@@ -135,10 +136,10 @@ module.exports = function DecodeBotAPI(knex) {
             .select('customers.name as Customers', 'sales.amount as Sales', 'sales.createdAt as Dates')
             .innerJoin('customers', 'customers.id', '=', 'sales.customer_id')
             .orderByRaw('Dates DESC')
-            .limit(5)
+            .limit(6)
          )
       },
-      //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)    %%%%%%
+      //Gross Profit Margin ((Total Rev - Total Cost)/Total Revenue)   
       /*For ALL DATA */
       grossProfitMargin: function() {
          return (

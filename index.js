@@ -2,6 +2,7 @@ var _ = require('lodash')
 var express = require('express');
 var app = express();
 var body_parser = require("body-parser");
+var cors = require("cors");
 
 var knex = require("knex")({
     dialect: 'mysql',
@@ -14,6 +15,8 @@ var knex = require("knex")({
 
 var decodeBotAPI = require("./backend")(knex)
 
+app.use(cors());
+
 app.use(body_parser.json());
 /* Is this below needed?*/
 app.use(body_parser.urlencoded({
@@ -22,10 +25,6 @@ app.use(body_parser.urlencoded({
 
 
 
-
-app.get("/", function(request, response) {
-    response.send(`<h1> Hello </h1>`)
-})
 
 app.get('/sales', function(request, response) {
     if (!_.isEmpty(request.query)) {
@@ -65,13 +64,6 @@ app.get('/expenses', function(request, response) {
         else if (request.query.year) {
             decodeBotAPI
                 .costForGivenYear(request.query.year)
-                .then(data => {
-                    response.json(data);
-                })
-        }
-        else if (request.query.costPerCustomer) {
-            decodeBotAPI
-                .costPerCustomer()
                 .then(data => {
                     response.json(data);
                 })

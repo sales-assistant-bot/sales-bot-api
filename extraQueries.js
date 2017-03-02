@@ -190,7 +190,7 @@ module.exports = function ExtraQueries(knex) {
                 knex('sales')
                 .select('customers.name as Customer')
                 .sum('sales.amount as Total_Revenue')
-                .select(knex.raw('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year'))
+                .selet(knex.raw('MONTH(sales.createdAt) as Month, YEAR(sales.createdAt) as Year'))
                 .innerJoin('customers', 'sales.customer_id', '=', 'customers.id')
                 .where('customers.id', customerId)
                 .groupByRaw('YEAR(sales.createdAt), MONTH(sales.createdAt)')
