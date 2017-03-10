@@ -2,6 +2,10 @@
 
 Sales Bot is a tool that allows salespeople to interact with a message bot that acts like a sales assistant. Relevant information relating to the users Clients, Sales, Costs, and Performance Goals gathered and sent to the Sales Bot API. The API will receive the gathered information, store it, and can be called in order to recieve the relevant `JSON` from the request
 
+## Demo
+* Click link below to see demo presentation of the Sales Bot Project
+* [Sales Bot Demo](https://www.youtube.com/watch?v=KC0GPHN8mYs)
+
 ## Getting Started
 ### Install
 ```sh
